@@ -1,6 +1,18 @@
 const weatherAlerts = () => {
-  let url = ""
+  let url = parseYAML();
   return parseXml(url);
+}
+
+function parseYAML(){
+  // your YAML string
+  var string =
+`url: `
+  // JSON object
+  var obj = YAML.eval(string);
+  //remove quotes from string
+  var url = JSON.stringify(obj['url']).replace(/['"]+/g, '');
+  Logger.log(url);
+  return url
 }
 
 function parseXml(url) {
@@ -14,6 +26,7 @@ function parseXml(url) {
   for (let i = 0; i < entries.length; i++) {
     const title = entries[i].getChild('title', atom).getText();
     const summary = entries[i].getChild('summary', atom).getText();
+    Logger.log(title + "\n" + summary );
     res.push( 
     { 
       "header" : title, 
@@ -32,6 +45,6 @@ function parseXml(url) {
   },
   "sections": [ res ]
   }
-  // Logger.log(card);
+  Logger.log(card);
   return card
 }
